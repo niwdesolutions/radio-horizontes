@@ -9,7 +9,12 @@
 /* VERSION 2 · información local y visualizador de audio */
 .audio-wave{position:absolute;z-index:2;bottom:42px;left:50%;transform:translateX(-50%);height:58px;width:min(82%,420px);display:flex;align-items:center;justify-content:center;gap:4px;pointer-events:none}
 .audio-wave i{display:block;width:4px;min-height:4px;border-radius:8px;background:linear-gradient(180deg,var(--gold),#e7a33a 65%,var(--red2));box-shadow:0 0 9px #f5d52d45;transition:height .08s linear}
-.audio-wave.is-playing i{opacity:.98}
+.audio-wave.is-playing i{opacity:.98;transform-origin:center;animation:waveBeat .72s ease-in-out infinite alternate}
+.audio-wave.is-playing i:nth-child(4n){animation-duration:.48s}
+.audio-wave.is-playing i:nth-child(4n+1){animation-duration:.63s}
+.audio-wave.is-playing i:nth-child(4n+2){animation-duration:.82s}
+.audio-wave.is-playing i:nth-child(5n){animation-delay:-.35s}
+@keyframes waveBeat{0%{transform:scaleY(.18)}35%{transform:scaleY(.62)}70%{transform:scaleY(1)}100%{transform:scaleY(.32)}}
 .analysis-note{font-size:9px!important;color:var(--gold)!important;margin:10px 0 0!important}
 .info-section{padding-top:80px;padding-bottom:85px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:16px}
@@ -180,3 +185,8 @@ footer{background:#0b0d0c}
 .weather-loading{font-size:16px;color:#d4dbd1;padding:20px 0}
 .weather-card-visual .data-note{font-size:10px!important;color:#98a399;margin-top:9px}
 @media(max-width:560px){.weather-temperature{font-size:52px}.weather-symbol{font-size:58px}.weather-metrics span{font-size:10px}.weather-metrics strong{font-size:14px}}
+
+.now-playing{display:flex;flex-direction:column;gap:4px;margin:16px 0 12px;padding:12px 15px;border-left:2px solid var(--gold);background:#ffffff08}
+.now-playing-label{font-size:8px;letter-spacing:1.8px;font-weight:800;color:var(--gold)}
+.now-playing strong{font-size:15px;color:var(--text);font-weight:700}
+.now-playing small{font-size:9px;letter-spacing:1px;color:#b9a99b}

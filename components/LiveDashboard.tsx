@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 
-const radioUrl = process.env.NEXT_PUBLIC_RADIO_STREAM_URL || "https://ares.disfrutaenlared.com:9060/stream";
+const radioUrl = process.env.NEXT_PUBLIC_RADIO_STREAM_URL || "https://ares.disfrutaenlared.com:9060/";
 const tvUrl = process.env.NEXT_PUBLIC_TV_STREAM_URL || "https://ares.disfrutaenlared.com:1936/htv/htv/playlist.m3u8";
 const tvPlayerUrl = process.env.NEXT_PUBLIC_TV_PLAYER_URL || "https://ares.disfrutaenlared.com/VideoPlayer/htv";
 const facebookUrl = process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://www.facebook.com/RadioTvHorizontesSucre";
@@ -138,7 +138,7 @@ export default function LiveDashboard() {
   const [volume, setVolume] = useState(80);
   const [radioError, setRadioError] = useState("");
   const [tvError, setTvError] = useState("");
-  const [waveHeights, setWaveHeights] = useState<number[]>(Array(28).fill(5));
+  const [waveHeights, setWaveHeights] = useState<number[]>(Array(40).fill(5));
   const [audioAnalysis, setAudioAnalysis] = useState(false);
 
   useEffect(() => { if (audioRef.current) audioRef.current.volume = volume / 100; }, [volume]);
@@ -158,7 +158,7 @@ export default function LiveDashboard() {
   function stopWaveAnimation() {
     if (animationRef.current !== null) cancelAnimationFrame(animationRef.current);
     animationRef.current = null;
-    setWaveHeights(Array(28).fill(5));
+    setWaveHeights(Array(40).fill(5));
   }
 
   function startWaveAnimation() {
@@ -170,7 +170,7 @@ export default function LiveDashboard() {
       if (!audioContextRef.current) {
         const context = new AudioContextClass();
         const analyser = context.createAnalyser();
-        analyser.fftSize = 64;
+        analyser.fftSize = 128;
         const source = context.createMediaElementSource(audio);
         source.connect(analyser); analyser.connect(context.destination);
         audioContextRef.current = context; analyserRef.current = analyser;
@@ -184,19 +184,19 @@ export default function LiveDashboard() {
         const peak = Math.max(...Array.from(data));
         if (peak < 2) {
           setAudioAnalysis(false);
-          setWaveHeights(Array(28).fill(5));
+          setWaveHeights(Array(40).fill(5));
           animationRef.current = null;
           return;
         }
         setAudioAnalysis(true);
-        setWaveHeights(Array.from({ length: 28 }, (_, i) => Math.max(5, Math.min(54, (data[i % data.length] / 255) * 54))));
+        setWaveHeights(Array.from({ length: 40 }, (_, i) => Math.max(5, Math.min(58, (data[i % data.length] / 255) * 58))));
         animationRef.current = requestAnimationFrame(draw);
       };
       draw();
     } catch {
       // No false rhythm animation: without analyser access we keep a static signal indicator.
       setAudioAnalysis(false);
-      setWaveHeights(Array(28).fill(5));
+      setWaveHeights(Array(40).fill(5));
     }
   }
 
@@ -238,7 +238,7 @@ export default function LiveDashboard() {
 
       <section className="content wrap" id="radio"><div className="section-heading"><div><div className="eyebrow">SIEMPRE CONTIGO</div><h2>Escucha <em>en vivo</em></h2></div><span className="section-index">01 / RADIO</span></div>
         <div className="radio-card"><div className="radio-visual"><div className={`audio-wave${radioPlaying ? " is-playing" : ""}`} aria-label={radioPlaying ? "Visualizador de audio en vivo" : "Visualizador detenido"}>{waveHeights.map((height, i) => <i key={i} style={{ height: `${height}px` }} />)}</div><img className="radio-logo-image" src="/logo-nuevo-usuario.jpeg" alt="Radio Horizontes" /><span className="visual-caption">HORIZONTES · EN VIVO</span></div>
-          <div className="radio-controls"><div className="card-kicker"><span className="live-pill"><i /> EN VIVO</span><span>RADIO ONLINE</span></div><h3>RADIO HORIZONTES<br /><em>FM 91.3 · AM 1440</em></h3><p>La radio de los artistas. Disfruta de nuestra programación estés donde estés.</p><div className="player-row"><button className="play-button" onClick={toggleRadio} aria-label={radioPlaying ? "Pausar radio" : "Reproducir radio"}><PlayIcon playing={radioPlaying}/></button><div className="player-status"><strong>{radioPlaying ? "REPRODUCIENDO" : "LISTO PARA ESCUCHAR"}</strong><span>{radioPlaying ? "Estás conectado a la señal en vivo" : "Presiona reproducir para comenzar"}</span></div></div><div className="volume-row"><span>VOL</span><input aria-label="Volumen de radio" type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))}/><span>{volume}%</span></div>{radioPlaying && audioAnalysis && <p className="analysis-note">Visualizador sincronizado con el audio</p>}{radioError && <p className="notice">{radioError}</p>}<audio ref={audioRef} src={radioUrl || undefined} preload="none" onPlay={() => setRadioPlaying(true)} onPause={() => { setRadioPlaying(false); stopWaveAnimation(); }} onError={() => setRadioError("No se pudo conectar con la señal de radio. Revisa la URL configurada.")} /></div>
+          <div className="radio-controls"><div className="card-kicker"><span className="live-pill"><i /> EN VIVO</span><span>RADIO ONLINE</span></div><h3>RADIO HORIZONTES<br /><em>FM 91.3 · AM 1440</em></h3><p>La radio de los artistas. Disfruta de nuestra programación estés donde estés.</p><div className="now-playing"><span className="now-playing-label">AHORA EN HORIZONTES</span><strong>Señal en directo</strong><small>RADIO HORIZONTES FM 91.3 · AM 1440</small></div><div className="player-row"><button className="play-button" onClick={toggleRadio} aria-label={radioPlaying ? "Pausar radio" : "Reproducir radio"}><PlayIcon playing={radioPlaying}/></button><div className="player-status"><strong>{radioPlaying ? "REPRODUCIENDO" : "LISTO PARA ESCUCHAR"}</strong><span>{radioPlaying ? "Estás conectado a la señal en vivo" : "Presiona reproducir para comenzar"}</span></div></div><div className="volume-row"><span>VOL</span><input aria-label="Volumen de radio" type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))}/><span>{volume}%</span></div>{radioPlaying && audioAnalysis && <p className="analysis-note">Visualizador de señal en directo</p>}{radioError && <p className="notice">{radioError}</p>}<audio ref={audioRef} src={radioUrl || undefined} preload="none" onPlay={() => setRadioPlaying(true)} onPause={() => { setRadioPlaying(false); stopWaveAnimation(); }} onError={() => setRadioError("No se pudo conectar con la señal de radio. Revisa la URL configurada.")} /></div>
         </div>
       </section>
 
