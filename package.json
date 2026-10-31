@@ -1,6 +1,6 @@
 {
   "name": "radio-horizontes-fm-913",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "hls.js": "^1.6.13",
-    "next": "^15.5.28",
+    "next": "15.5.28",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
