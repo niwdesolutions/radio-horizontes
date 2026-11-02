@@ -111,19 +111,124 @@ function ExchangeCard() {
   return <article className="info-card exchange-card"><div className="info-card-top"><span className="mini-label">REFERENCIA OFICIAL</span><span className="currency-mark">$</span></div><h3>Dólar <em>· Bolivia</em></h3>{exchange ? <><div className="exchange-value">Bs {exchange.rate.toFixed(2)}</div><p>Por cada 1 dólar estadounidense (USD)</p><div className="weather-foot"><span>Fecha de actualización</span><strong>{date}</strong></div></> : <p>{error ? "Cotización no disponible en este momento." : "Consultando cotización oficial…"}</p>}<a href="https://www.bcb.gob.bo/grafico_evolutivo/" target="_blank" rel="noreferrer" className="source-link">Fuente oficial · Banco Central de Bolivia ↗</a><small className="data-note">Dato oficial replicado desde fuentes públicas; puede existir demora de publicación.</small></article>;
 }
 
+
 function CalendarCard() {
-  const [month, setMonth] = useState(() => new Date());
+  const [today, setToday] = useState(() => new Date());
+  const [month, setMonth] = useState(
+    () => new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+  );
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setToday(new Date());
+    }, 60000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
   const year = month.getFullYear();
   const monthIndex = month.getMonth();
   const firstDay = new Date(year, monthIndex, 1).getDay();
   const days = new Date(year, monthIndex + 1, 0).getDate();
-  const today = new Date();
+
   const holidays: Record<string, string> = {
-    "2026-01-01": "Año Nuevo", "2026-01-22": "Día del Estado Plurinacional", "2026-02-16": "Carnaval", "2026-02-17": "Carnaval", "2026-04-03": "Viernes Santo", "2026-05-01": "Día del Trabajo", "2026-06-04": "Corpus Christi", "2026-06-21": "Año Nuevo Andino", "2026-08-06": "Día de la Independencia", "2026-11-02": "Día de Todos los Difuntos", "2026-12-25": "Navidad"
+    "2026-01-01": "Año Nuevo",
+    "2026-01-22": "Día del Estado Plurinacional",
+    "2026-02-16": "Carnaval",
+    "2026-02-17": "Carnaval",
+    "2026-04-03": "Viernes Santo",
+    "2026-05-01": "Día del Trabajo",
+    "2026-06-04": "Corpus Christi",
+    "2026-06-21": "Año Nuevo Andino",
+    "2026-08-06": "Día de la Independencia",
+    "2026-11-02": "Día de Todos los Difuntos",
+    "2026-12-25": "Navidad"
   };
-  const key = (day: number) => `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-  const monthName = month.toLocaleDateString("es-BO", { month: "long", year: "numeric" });
-  return <article className="info-card calendar-card"><div className="info-card-top"><span className="mini-label">AGENDA Y FECHAS</span><span className="calendar-mark">▦</span></div><div className="calendar-heading"><h3>Calendario <em>Bolivia</em></h3><div className="calendar-nav"><button aria-label="Mes anterior" onClick={() => setMonth(new Date(year, monthIndex - 1, 1))}>‹</button><button aria-label="Mes siguiente" onClick={() => setMonth(new Date(year, monthIndex + 1, 1))}>›</button></div></div><div className="month-label">{monthName}</div><div className="calendar-grid">{["D","L","M","M","J","V","S"].map((d, i) => <span className="weekday" key={`${d}${i}`}>{d}</span>)}{Array.from({ length: firstDay }, (_, i) => <span key={`empty${i}`} />)}{Array.from({ length: days }, (_, i) => { const day = i + 1; const holiday = holidays[key(day)]; const isToday = day === today.getDate() && monthIndex === today.getMonth() && year === today.getFullYear(); return <span key={day} title={holiday || undefined} className={`calendar-day${isToday ? " today" : ""}${holiday ? " holiday" : ""}`}>{day}</span>; })}</div><div className="calendar-legend"><span><i className="today-dot"/> Hoy</span><span><i className="holiday-dot"/> Feriado nacional 2026</span></div><p className="data-note">Feriados nacionales referenciales. Las fechas trasladables deben confirmarse en el calendario oficial.</p></article>;
+
+  const dateKey = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+  const monthName = month.toLocaleDateString("es-BO", {
+    month: "long",
+    year: "numeric"
+  });
+
+  return (
+    <article className="info-card calendar-card">
+      <div className="info-card-top">
+        <span className="mini-label">AGENDA Y FECHAS</span>
+        <span className="calendar-mark">▦</span>
+      </div>
+
+      <div className="calendar-heading">
+        <h3>Calendario <em>Bolivia</em></h3>
+        <div className="calendar-nav">
+          <button
+            aria-label="Mes anterior"
+            onClick={() => setMonth(new Date(year, monthIndex - 1, 1))}
+          >
+            ‹
+          </button>
+          <button
+            aria-label="Mes siguiente"
+            onClick={() => setMonth(new Date(year, monthIndex + 1, 1))}
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      <div className="month-label">
+        {monthName.charAt(0).toUpperCase() + monthName.slice(1)}
+      </div>
+
+      <div className="calendar-grid">
+        {["D", "L", "M", "M", "J", "V", "S"].map((day, index) => (
+          <span className="weekday" key={`${day}${index}`}>
+            {day}
+          </span>
+        ))}
+
+        {Array.from({ length: firstDay }, (_, index) => (
+          <span key={`empty-${index}`} />
+        ))}
+
+        {Array.from({ length: days }, (_, index) => {
+          const day = index + 1;
+          const date = new Date(year, monthIndex, day);
+          const key = dateKey(date);
+          const holiday = holidays[key];
+          const isToday = key === dateKey(today);
+
+          const classes = [
+            "calendar-day",
+            isToday ? "today" : "",
+            holiday ? "holiday" : ""
+          ].filter(Boolean).join(" ");
+
+          return (
+            <span
+              key={key}
+              title={holiday || undefined}
+              className={classes}
+            >
+              {day}
+            </span>
+          );
+        })}
+      </div>
+
+      <div className="calendar-legend">
+        <span><i className="today-dot" /> Hoy</span>
+        <span><i className="holiday-dot" /> Feriado nacional 2026</span>
+      </div>
+
+      <p className="data-note">
+        Feriados nacionales referenciales. Las fechas trasladables deben
+        confirmarse en el calendario oficial.
+      </p>
+    </article>
+  );
 }
 
 export default function LiveDashboard() {
@@ -131,6 +236,12 @@ export default function LiveDashboard() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const [radioPlaying, setRadioPlaying] = useState(false);
+  const [radioVolume, setRadioVolume] = useState(0.8);
+  useEffect(() => {
+  if (audioRef.current) {
+    audioRef.current.volume = radioVolume;
+  }
+}, [radioVolume]);
   const [tvPlaying, setTvPlaying] = useState(false);
   const [radioError, setRadioError] = useState("");
   const [tvError, setTvError] = useState("");
@@ -183,8 +294,86 @@ export default function LiveDashboard() {
 
       <section className="content wrap" id="radio"><div className="section-heading"><div><div className="eyebrow">SIEMPRE CONTIGO</div><h2>Escucha <em>en vivo</em></h2></div><span className="section-index">01 / RADIO</span></div>
         <div className="radio-card"><div className="radio-visual"><img className="radio-logo-image" src="/logo-nuevo-usuario.jpeg" alt="Radio Horizontes" /><span className="visual-caption">HORIZONTES · EN VIVO</span></div>
-          <div className="radio-controls"><div className="card-kicker"><span className="live-pill"><i /> EN VIVO</span><span>RADIO ONLINE</span></div><h3>RADIO HORIZONTES<br /><em>FM 91.3 · AM 1440</em></h3><p>La radio de los artistas. Disfruta de nuestra programación estés donde estés.</p><div className="now-playing"><span className="now-playing-label">AHORA EN HORIZONTES</span><strong>Señal en directo</strong><small>RADIO HORIZONTES FM 91.3 · AM 1440</small></div><div className="player-row"><button className="play-button" onClick={toggleRadio} aria-label={radioPlaying ? "Pausar radio" : "Reproducir radio"}><PlayIcon playing={radioPlaying}/></button><div className="player-status"><strong>{radioPlaying ? "REPRODUCIENDO" : "LISTO PARA ESCUCHAR"}</strong><span>{radioPlaying ? "Estás conectado a la señal en vivo" : "Presiona reproducir para comenzar"}</span></div></div>{radioError && <p className="notice">{radioError}</p>}<audio ref={audioRef} src={radioUrl || undefined} preload="none" onPlay={() => { setRadioPlaying(true); setRadioError(""); }} onPause={() => setRadioPlaying(false)} onError={() => { setRadioPlaying(false); setRadioError("No se pudo conectar con la señal de radio. Revisa la URL configurada."); }} /></div>
-        </div>
+          
+<div className="radio-controls">
+  <div className="card-kicker">
+    <span className="live-pill"><i /> EN VIVO</span>
+    <span>RADIO ONLINE</span>
+  </div>
+
+  <h3>
+    RADIO HORIZONTES<br />
+    <em>FM 91.3 · AM 1440</em>
+  </h3>
+
+  <p>La radio de los artistas. Disfruta de nuestra programación estés donde estés.</p>
+
+  <div className="now-playing">
+    <span className="now-playing-label">AHORA EN HORIZONTES</span>
+    <strong>Señal en directo</strong>
+    <small>RADIO HORIZONTES FM 91.3 · AM 1440</small>
+  </div>
+
+  <div className={`radio-visualizer ${radioPlaying ? "playing" : ""}`}>
+    {Array.from({ length: 24 }, (_, index) => (
+      <span
+        key={index}
+        style={{ animationDelay: `${index * 0.07}s` }}
+      />
+    ))}
+  </div>
+
+  <div className="player-row">
+    <button
+      className="play-button"
+      onClick={toggleRadio}
+      aria-label={radioPlaying ? "Pausar radio" : "Reproducir radio"}
+    >
+      <PlayIcon playing={radioPlaying} />
+    </button>
+
+    <div className="player-status">
+      <strong>{radioPlaying ? "REPRODUCIENDO" : "LISTO PARA ESCUCHAR"}</strong>
+      <span>
+        {radioPlaying
+          ? "Estás conectado a la señal en vivo"
+          : "Presiona reproducir para comenzar"}
+      </span>
+    </div>
+  </div>
+
+  <div className="radio-volume">
+    <span>VOLUMEN</span>
+    <input
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      value={radioVolume}
+      onChange={(event) => setRadioVolume(Number(event.target.value))}
+      aria-label="Volumen de la radio"
+    />
+    <span>{Math.round(radioVolume * 100)}%</span>
+  </div>
+
+  {radioError && <p className="notice">{radioError}</p>}
+
+  <audio
+    ref={audioRef}
+    src={radioUrl || undefined}
+    preload="none"
+    onPlay={() => {
+      setRadioPlaying(true);
+      setRadioError("");
+    }}
+    onPause={() => setRadioPlaying(false)}
+    onError={() => {
+      setRadioPlaying(false);
+      setRadioError("No se pudo conectar con la señal de radio. Revisa la URL configurada.");
+    }}
+  />
+</div>
+</div>
       </section>
 
       <section className="content wrap tv-section" id="television"><div className="section-heading"><div><div className="eyebrow">IMAGEN Y SONIDO</div><h2>Horizontes <em>TV</em></h2></div><span className="section-index">02 / TELEVISIÓN</span></div><div className="tv-card"><div className="video-frame">{tvUrl ? <video ref={videoRef} playsInline controls onPlay={() => setTvPlaying(true)} onPause={() => setTvPlaying(false)} /> : <iframe className="tv-embed" src={tvPlayerUrl} title="Radio Horizontes TV en vivo" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />}</div><div className="tv-info"><div><span className="section-index">HORIZONTES TV · ONLINE</span><h3>La experiencia<br/>también se <em>ve.</em></h3><p>Disfruta nuestra señal de televisión en vivo desde esta pantalla.</p></div><a className="button button-red tv-button" href={tvUrl || tvPlayerUrl} target="_blank" rel="noreferrer"><span className="button-play">↗</span> ABRIR SEÑAL TV</a></div>{tvError && <p className="notice tv-notice">{tvError}</p>}</div></section>

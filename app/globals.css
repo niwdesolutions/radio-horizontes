@@ -190,3 +190,116 @@ footer{background:#0b0d0c}
 .now-playing-label{font-size:8px;letter-spacing:1.8px;font-weight:800;color:var(--gold)}
 .now-playing strong{font-size:15px;color:var(--text);font-weight:700}
 .now-playing small{font-size:9px;letter-spacing:1px;color:#b9a99b}
+
+
+/* =====================================
+   NUEVO REPRODUCTOR RADIO HORIZONTES
+===================================== */
+
+.radio-visualizer {
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 18px 0 8px;
+}
+
+.radio-visualizer span {
+  display: block;
+  width: 5px;
+  height: 7px;
+  border-radius: 5px;
+  background: var(--gold);
+  transform-origin: center;
+  animation: none;
+}
+
+.radio-visualizer.playing span {
+  animation: radio-equalizer 0.8s ease-in-out infinite alternate;
+}
+
+.radio-visualizer span:nth-child(5n + 1) { background: #00c6d7; }
+.radio-visualizer span:nth-child(5n + 2) { background: #16c784; }
+.radio-visualizer span:nth-child(5n + 3) { background: #f4cf25; }
+.radio-visualizer span:nth-child(5n + 4) { background: #ff8b32; }
+.radio-visualizer span:nth-child(5n) { background: #f04450; }
+
+@keyframes radio-equalizer {
+  0% { transform: scaleY(1); }
+  100% { transform: scaleY(6); }
+}
+
+/* Botón grande Play/Pause */
+
+.radio-controls .player-row {
+  margin-top: 12px;
+  gap: 20px;
+}
+
+.radio-controls .play-button {
+  width: 76px;
+  height: 76px;
+  min-width: 76px;
+  border-radius: 50%;
+  background: #ed4651;
+  box-shadow: 0 0 0 8px #ed465126, 0 8px 25px #0006;
+  transition: transform .2s, background .2s;
+}
+
+.radio-controls .play-button:hover {
+  transform: scale(1.06);
+  background: #ff5964;
+}
+
+.radio-controls .play-button svg {
+  width: 29px;
+  height: 29px;
+}
+
+/* Control de volumen */
+
+.radio-volume {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 25px;
+  color: #a5a7ad;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.radio-volume input {
+  flex: 1;
+  min-width: 50px;
+  max-width: 190px;
+  accent-color: #ed4651;
+  cursor: pointer;
+}
+
+.radio-volume span:last-child {
+  min-width: 35px;
+  text-align: right;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .radio-controls {
+    padding: 28px 22px;
+  }
+
+  .radio-visualizer {
+    gap: 4px;
+  }
+
+  .radio-visualizer span {
+    width: 4px;
+  }
+
+  .radio-controls .play-button {
+    width: 68px;
+    height: 68px;
+    min-width: 68px;
+  }
+}
