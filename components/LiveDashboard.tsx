@@ -293,8 +293,24 @@ export default function LiveDashboard() {
       <section className="live-strip"><div className="wrap strip-inner"><span className="live-pill"><i /> EN DIRECTO</span><span>RADIO HORIZONTES FM 91.3</span><span className="strip-divider">/</span><span>LA RADIO DE LOS ARTISTAS</span><span className="strip-spacer" /><span className="strip-location">SUCRE · BOLIVIA</span></div></section>
 
       <section className="content wrap" id="radio"><div className="section-heading"><div><div className="eyebrow">SIEMPRE CONTIGO</div><h2>Escucha <em>en vivo</em></h2></div><span className="section-index">01 / RADIO</span></div>
-        <div className="radio-card"><div className="radio-visual"><img className="radio-logo-image" src="/logo-nuevo-usuario.jpeg" alt="Radio Horizontes" /><span className="visual-caption">HORIZONTES · EN VIVO</span></div>
-          
+<div className="radio-card">
+  <div className={`radio-visual ${radioPlaying ? "playing" : ""}`}>
+    <div className="radio-wave-ring">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <img
+      className="radio-logo-image"
+      src="/logo-nuevo-usuario.jpeg"
+      alt="Radio Horizontes"
+    />
+
+    <span className="visual-caption">HORIZONTES · EN VIVO</span>
+  </div>
+       
 <div className="radio-controls">
   <div className="card-kicker">
     <span className="live-pill"><i /> EN VIVO</span>
