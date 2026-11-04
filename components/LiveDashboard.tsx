@@ -364,7 +364,7 @@ export default function LiveDashboard() {
     <main>
       <div className="topline"><span className="topline-dot" /> TRANSMISIÓN DIGITAL · SUCRE, BOLIVIA</div>
       <header className="header wrap">
-        <a className="brand" href="/" aria-label="Radio Horizontes inicio"><img className="brand-logo" src="/logo-horizontes-v2.png" alt="Radio Horizontes FM 91.3 - AM 1440" /></a>
+        <a className="brand" href="/" aria-label="Radio Horizontes inicio"><img className="brand-logo" src="/logo-horizontes-v2.png" alt="Radio Horizontes FM 91.3" /></a>
         <nav className="nav"><a href="#radio">RADIO EN VIVO</a><a href="#television">TELEVISIÓN</a><a href="#actualidad">ACTUALIDAD</a><a href="#contacto">CONTACTO</a></nav>
         <SucreClock />
         <a className="header-live" href="#radio"><span /> EN VIVO</a>
@@ -372,7 +372,7 @@ export default function LiveDashboard() {
 
       <section className="hero wrap">
         <div className="hero-copy"><div className="eyebrow"><span className="eyebrow-line" /> TU COMPAÑÍA, DONDE ESTÉS</div><h1>LA RADIO<br /><em>DE LOS ARTISTAS.</em></h1><p className="hero-text">La música, las voces y las historias que nos conectan. Sintoniza Horizontes FM 91.3 desde cualquier lugar.</p><div className="hero-actions"><a className="button button-red" href="#radio"><span className="button-play">▶</span> ESCUCHAR EN VIVO</a><a className="button button-outline" href="#television">VER TELEVISIÓN <span>↗</span></a></div><div className="hero-meta"><span className="signal-bars"><i/><i/><i/><i/><i/></span> TRANSMITIENDO PARA TI <b>·</b> 24/7</div></div>
-        <div className="hero-art" aria-label="Logotipo oficial de Radio Horizontes"><img src="/logo-nuevo-usuario.jpeg" alt="Radio Horizontes FM 91.3 - AM 1440" /></div>
+        <div className="hero-art" aria-label="Logotipo oficial de Radio Horizontes"><img src="/logo-nuevo-usuario.jpeg" alt="Radio Horizontes FM 91.3" /></div>
       </section>
 
       <section className="live-strip"><div className="wrap strip-inner"><span className="live-pill"><i /> EN DIRECTO</span><span>RADIO HORIZONTES FM 91.3</span><span className="strip-divider">/</span><span>LA RADIO DE LOS ARTISTAS</span><span className="strip-spacer" /><span className="strip-location">SUCRE · BOLIVIA</span></div></section>
