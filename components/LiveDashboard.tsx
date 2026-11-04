@@ -408,12 +408,6 @@ export default function LiveDashboard() {
 
   <p>La radio de los artistas. Disfruta de nuestra programación estés donde estés.</p>
 
-  <div className="now-playing">
-    <span className="now-playing-label">AHORA EN HORIZONTES</span>
-    <strong>Señal en directo</strong>
-    <small>RADIO HORIZONTES FM 91.3 · AM 1440</small>
-  </div>
-
   <div className={`radio-visualizer ${radioPlaying ? "playing" : ""}`}>
     {Array.from({ length: 24 }, (_, index) => (
       <span
