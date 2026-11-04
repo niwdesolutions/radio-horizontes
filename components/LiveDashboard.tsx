@@ -113,23 +113,82 @@ function ExchangeCard() {
 
 
 function CalendarCard() {
-  const [today, setToday] = useState(() => new Date());
-  const [month, setMonth] = useState(
-    () => new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-  );
+  const [today, setToday] = useState<{
+    year: number;
+    month: number;
+    day: number;
+  } | null>(null);
+
+  const [month, setMonth] = useState<Date | null>(null);
+
+  // Obtiene siempre la fecha real de Bolivia (UTC-4).
+  const getBoliviaDate = () => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/La_Paz",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }).formatToParts(new Date());
+
+    const getPart = (type: string) =>
+      Number(parts.find((part) => part.type === type)?.value);
+
+    return {
+      year: getPart("year"),
+      month: getPart("month") - 1,
+      day: getPart("day"),
+    };
+  };
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setToday(new Date());
-    }, 60000);
+    const updateDate = () => {
+      const boliviaDate = getBoliviaDate();
+
+      setToday(boliviaDate);
+
+      setMonth((currentMonth) => {
+        // Al iniciar, mostrar siempre el mes actual de Bolivia.
+        if (!currentMonth) {
+          return new Date(
+            Date.UTC(boliviaDate.year, boliviaDate.month, 1)
+          );
+        }
+
+        return currentMonth;
+      });
+    };
+
+    updateDate();
+
+    // Actualizar la fecha sin depender de las flechas.
+    const timer = window.setInterval(updateDate, 60000);
 
     return () => window.clearInterval(timer);
   }, []);
 
-  const year = month.getFullYear();
-  const monthIndex = month.getMonth();
-  const firstDay = new Date(year, monthIndex, 1).getDay();
-  const days = new Date(year, monthIndex + 1, 0).getDate();
+  // Evita mostrar fechas incorrectas durante la inicialización.
+  if (!today || !month) {
+    return (
+      <article className="info-card calendar-card">
+        <div className="info-card-top">
+          <span className="mini-label">AGENDA Y FECHAS</span>
+          <span className="calendar-mark">▦</span>
+        </div>
+        <p className="month-label">Cargando calendario...</p>
+      </article>
+    );
+  }
+
+  const year = month.getUTCFullYear();
+  const monthIndex = month.getUTCMonth();
+
+  const firstDay = new Date(
+    Date.UTC(year, monthIndex, 1)
+  ).getUTCDay();
+
+  const days = new Date(
+    Date.UTC(year, monthIndex + 1, 0)
+  ).getUTCDate();
 
   const holidays: Record<string, string> = {
     "2026-01-01": "Año Nuevo",
@@ -142,16 +201,20 @@ function CalendarCard() {
     "2026-06-21": "Año Nuevo Andino",
     "2026-08-06": "Día de la Independencia",
     "2026-11-02": "Día de Todos los Difuntos",
-    "2026-12-25": "Navidad"
+    "2026-12-25": "Navidad",
   };
 
-  const dateKey = (date: Date) =>
-    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-
-  const monthName = month.toLocaleDateString("es-BO", {
+  const monthName = new Intl.DateTimeFormat("es-BO", {
     month: "long",
-    year: "numeric"
-  });
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(year, monthIndex, 1)));
+
+  const changeMonth = (offset: number) => {
+    setMonth(
+      new Date(Date.UTC(year, monthIndex + offset, 1))
+    );
+  };
 
   return (
     <article className="info-card calendar-card">
@@ -162,16 +225,20 @@ function CalendarCard() {
 
       <div className="calendar-heading">
         <h3>Calendario <em>Bolivia</em></h3>
+
         <div className="calendar-nav">
           <button
+            type="button"
             aria-label="Mes anterior"
-            onClick={() => setMonth(new Date(year, monthIndex - 1, 1))}
+            onClick={() => changeMonth(-1)}
           >
             ‹
           </button>
+
           <button
+            type="button"
             aria-label="Mes siguiente"
-            onClick={() => setMonth(new Date(year, monthIndex + 1, 1))}
+            onClick={() => changeMonth(1)}
           >
             ›
           </button>
@@ -183,11 +250,13 @@ function CalendarCard() {
       </div>
 
       <div className="calendar-grid">
-        {["D", "L", "M", "M", "J", "V", "S"].map((day, index) => (
-          <span className="weekday" key={`${day}${index}`}>
-            {day}
-          </span>
-        ))}
+        {["D", "L", "M", "M", "J", "V", "S"].map(
+          (day, index) => (
+            <span className="weekday" key={`${day}${index}`}>
+              {day}
+            </span>
+          )
+        )}
 
         {Array.from({ length: firstDay }, (_, index) => (
           <span key={`empty-${index}`} />
@@ -195,16 +264,27 @@ function CalendarCard() {
 
         {Array.from({ length: days }, (_, index) => {
           const day = index + 1;
-          const date = new Date(year, monthIndex, day);
-          const key = dateKey(date);
+
+          const key = [
+            year,
+            String(monthIndex + 1).padStart(2, "0"),
+            String(day).padStart(2, "0"),
+          ].join("-");
+
           const holiday = holidays[key];
-          const isToday = key === dateKey(today);
+
+          const isToday =
+            today.year === year &&
+            today.month === monthIndex &&
+            today.day === day;
 
           const classes = [
             "calendar-day",
             isToday ? "today" : "",
-            holiday ? "holiday" : ""
-          ].filter(Boolean).join(" ");
+            holiday ? "holiday" : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
 
           return (
             <span
@@ -219,13 +299,17 @@ function CalendarCard() {
       </div>
 
       <div className="calendar-legend">
-        <span><i className="today-dot" /> Hoy</span>
-        <span><i className="holiday-dot" /> Feriado nacional 2026</span>
+        <span>
+          <i className="today-dot" /> Hoy
+        </span>
+        <span>
+          <i className="holiday-dot" /> Feriado nacional 2026
+        </span>
       </div>
 
       <p className="data-note">
-        Feriados nacionales referenciales. Las fechas trasladables deben
-        confirmarse en el calendario oficial.
+        Feriados nacionales referenciales. Las fechas trasladables
+        deben confirmarse en el calendario oficial.
       </p>
     </article>
   );
