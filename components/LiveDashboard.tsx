@@ -522,6 +522,7 @@ export default function LiveDashboard() {
     data-adapt-container-width="true"
     data-hide-cover="false"
     data-show-facepile="true"
+    data-colorscheme="dark"
   />
   </div>
   </div>

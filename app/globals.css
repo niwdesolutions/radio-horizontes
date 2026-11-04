@@ -463,3 +463,23 @@ footer{background:#0b0d0c}
     height: 650px;
   }
 }
+/* Facebook: diseño adaptable a móviles */
+.facebook-feed {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.facebook-feed iframe,
+.facebook-feed .fb-page,
+.facebook-feed span {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.facebook-feed iframe {
+  width: 100% !important;
+}
