@@ -430,21 +430,41 @@ footer{background:#0b0d0c}
   white-space: nowrap;
 }
 
+/* Contenedor desplazable */
 .facebook-feed {
-  display: flex;
-  justify-content: center;
-  padding: 25px 15px;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 25px 0;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: auto;
+  scrollbar-color: #e8c82d #303633;
   background: #101312;
 }
 
-.facebook-feed iframe {
-  width: 100%;
-  max-width: 500px;
-  height: 650px;
-  background: white;
-  border-radius: 4px;
+/* Ancho fijo del complemento */
+.facebook-feed .fb-page {
+  display: block;
+  width: 500px !important;
+  min-width: 500px !important;
+  max-width: none !important;
+  margin: 0 auto;
 }
 
+.facebook-feed iframe {
+  width: 500px !important;
+  max-width: none !important;
+  height: 650px;
+  border: 0;
+  background: white;
+}
+
+/* Celulares */
 @media (max-width: 600px) {
   .facebook-card-header {
     flex-direction: column;
@@ -456,33 +476,15 @@ footer{background:#0b0d0c}
   }
 
   .facebook-feed {
-    padding: 15px 8px;
+    padding: 15px 0;
   }
+
+  .facebook-feed .fb-page {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
 
   .facebook-feed iframe {
     height: 650px;
   }
-}
-/* Facebook: desplazamiento horizontal en móviles */
-.facebook-feed {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  border-radius: 12px;
-  background: #111;
-}
-
-.facebook-feed .fb-page {
-  width: 500px !important;
-  min-width: 500px !important;
-  max-width: none !important;
-}
-
-.facebook-feed iframe {
-  max-width: none !important;
-}
