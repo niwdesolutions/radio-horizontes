@@ -404,7 +404,7 @@ export default function LiveDashboard() {
 
   <h3>
     RADIO HORIZONTES<br />
-    <em>FM 91.3 · AM 1440</em>
+    <em>FM 91.3</em>
   </h3>
 
   <p>La radio de los artistas. Disfruta de nuestra programación estés donde estés.</p>
