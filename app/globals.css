@@ -463,23 +463,26 @@ footer{background:#0b0d0c}
     height: 650px;
   }
 }
-/* Facebook: diseño adaptable a móviles */
+/* Facebook: desplazamiento horizontal en móviles */
 .facebook-feed {
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
   border-radius: 12px;
+  background: #111;
 }
 
-.facebook-feed iframe,
-.facebook-feed .fb-page,
-.facebook-feed span {
-  max-width: 100% !important;
-  box-sizing: border-box;
+.facebook-feed .fb-page {
+  width: 500px !important;
+  min-width: 500px !important;
+  max-width: none !important;
 }
 
 .facebook-feed iframe {
-  width: 100% !important;
+  max-width: none !important;
 }

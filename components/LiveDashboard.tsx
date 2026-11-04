@@ -519,7 +519,7 @@ export default function LiveDashboard() {
     data-width="500"
     data-height="650"
     data-small-header="false"
-    data-adapt-container-width="true"
+    data-adapt-container-width="false"
     data-hide-cover="false"
     data-show-facepile="true"
     data-colorscheme="dark"
