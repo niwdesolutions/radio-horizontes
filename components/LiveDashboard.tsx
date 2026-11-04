@@ -473,6 +473,48 @@ export default function LiveDashboard() {
       <section className="content wrap tv-section" id="television"><div className="section-heading"><div><div className="eyebrow">IMAGEN Y SONIDO</div><h2>Horizontes <em>TV</em></h2></div><span className="section-index">02 / TELEVISIÓN</span></div><div className="tv-card"><div className="video-frame">{tvUrl ? <video ref={videoRef} playsInline controls onPlay={() => setTvPlaying(true)} onPause={() => setTvPlaying(false)} /> : <iframe className="tv-embed" src={tvPlayerUrl} title="Radio Horizontes TV en vivo" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />}</div><div className="tv-info"><div><span className="section-index">HORIZONTES TV · ONLINE</span><h3>La experiencia<br/>también se <em>ve.</em></h3><p>Disfruta nuestra señal de televisión en vivo desde esta pantalla.</p></div><a className="button button-red tv-button" href={tvUrl || tvPlayerUrl} target="_blank" rel="noreferrer"><span className="button-play">↗</span> ABRIR SEÑAL TV</a></div>{tvError && <p className="notice tv-notice">{tvError}</p>}</div></section>
 
       <section className="content wrap info-section" id="actualidad"><div className="section-heading"><div><div className="eyebrow">INFORMACIÓN PARA TI</div><h2>Sucre <em>al día</em></h2></div><span className="section-index">03 / ACTUALIDAD</span></div><div className="info-grid"><WeatherCard/><ExchangeCard/><CalendarCard/></div></section>
+      
+<section className="facebook-section content wrap" id="facebook">
+  <div className="section-heading">
+    <div>
+      <div className="eyebrow">NUESTRA COMUNIDAD</div>
+      <h2>Horizontes en <em>Facebook</em></h2>
+    </div>
+    <span className="section-index">04 / FACEBOOK</span>
+  </div>
+
+  <div className="facebook-card">
+    <div className="facebook-card-header">
+      <div>
+        <span className="facebook-label">SÍGUENOS EN FACEBOOK</span>
+        <h3>Radio Horizontes <em>Sucre</em></h3>
+        <p>Entérate de nuestras últimas noticias y transmisiones.</p>
+      </div>
+      <a
+        href={facebookUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="facebook-follow"
+      >
+        VISITAR FACEBOOK ↗
+      </a>
+    </div>
+
+    <div className="facebook-feed">
+      <iframe
+        src={`https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(facebookUrl)}&tabs=timeline&width=500&height=650&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true`}
+        width="500"
+        height="650"
+        style={{ border: 0, overflow: "hidden" }}
+        scrolling="no"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        title="Publicaciones de Radio Horizontes en Facebook"
+        loading="lazy"
+      />
+    </div>
+  </div>
+</section>
 
       <section className="social-band"><div className="wrap social-inner"><div><div className="eyebrow">SIGUE CONECTADO</div><h2>Horizontes está <em>contigo.</em></h2><p>Noticias, transmisiones y toda nuestra comunidad en redes sociales.</p></div><div className="social-actions"><a href={facebookUrl} target="_blank" rel="noreferrer">FACEBOOK <span>↗</span></a><a href={youtubeUrl} target="_blank" rel="noreferrer">YOUTUBE <span>↗</span></a><a href={whatsappUrl} target="_blank" rel="noreferrer">WHATSAPP <span>↗</span></a></div></div></section>
       <section className="quote-section"><div className="wrap quote-inner"><span className="quote-mark">“</span><p>La música nos une.<br/><em>La radio nos acerca.</em></p><span className="quote-signature">RADIO HORIZONTES FM 91.3</span></div></section>

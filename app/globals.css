@@ -372,3 +372,94 @@ footer{background:#0b0d0c}
     transform: rotate(360deg);
   }
 }
+
+
+/* FACEBOOK - PUBLICACIONES */
+
+.facebook-section {
+  padding-top: 65px;
+  padding-bottom: 65px;
+}
+
+.facebook-card {
+  background: #151817;
+  border: 1px solid #303633;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.facebook-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 28px;
+  border-bottom: 1px solid #303633;
+}
+
+.facebook-label {
+  color: #e8c82d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.facebook-card-header h3 {
+  color: #fff;
+  font-size: 25px;
+  margin: 10px 0;
+}
+
+.facebook-card-header h3 em {
+  color: #e8c82d;
+  font-style: normal;
+}
+
+.facebook-card-header p {
+  color: #aaa;
+  font-size: 13px;
+}
+
+.facebook-follow {
+  background: #1877f2;
+  color: white;
+  padding: 13px 18px;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.facebook-feed {
+  display: flex;
+  justify-content: center;
+  padding: 25px 15px;
+  background: #101312;
+}
+
+.facebook-feed iframe {
+  width: 100%;
+  max-width: 500px;
+  height: 650px;
+  background: white;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .facebook-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .facebook-card-header h3 {
+    font-size: 21px;
+  }
+
+  .facebook-feed {
+    padding: 15px 8px;
+  }
+
+  .facebook-feed iframe {
+    height: 650px;
+  }
+}
