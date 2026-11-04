@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
+import Script from "next/script";
 
 const radioUrl = process.env.NEXT_PUBLIC_RADIO_STREAM_URL || "https://ares.disfrutaenlared.com:9060/stream";
 const tvUrl = process.env.NEXT_PUBLIC_TV_STREAM_URL || "https://ares.disfrutaenlared.com:1936/htv/htv/playlist.m3u8";
@@ -501,18 +502,28 @@ export default function LiveDashboard() {
     </div>
 
     <div className="facebook-feed">
-      <iframe
-        src={`https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(facebookUrl)}&tabs=timeline&width=500&height=650&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true`}
-        width="500"
-        height="650"
-        style={{ border: 0, overflow: "hidden" }}
-        scrolling="no"
-        frameBorder="0"
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        title="Publicaciones de Radio Horizontes en Facebook"
-        loading="lazy"
-      />
-    </div>
+  <div id="fb-root" />
+
+  <Script
+    async
+    defer
+    crossOrigin="anonymous"
+    src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v26.0"
+    strategy="afterInteractive"
+  />
+
+  <div
+    className="fb-page"
+    data-href={facebookUrl}
+    data-show-posts="true"
+    data-width="500"
+    data-height="650"
+    data-small-header="false"
+    data-adapt-container-width="true"
+    data-hide-cover="false"
+    data-show-facepile="true"
+  />
+  </div>
   </div>
 </section>
 
